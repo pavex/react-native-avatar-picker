@@ -16,7 +16,9 @@ export default class AvatarPicker extends React.Component {
 		imageWidth: PropTypes.number,
 		imageHeigh: PropTypes.number,
 		borderColor: PropTypes.string,
-		borderRadius: PropTypes.number
+		borderRadius: PropTypes.number,
+		source: PropTypes.number,
+		onSourceChange: PropTypes.func
 	};
 
 
@@ -40,7 +42,18 @@ export default class AvatarPicker extends React.Component {
 
 //	
 	state = {
-		avatarSource: null
+		avatarSource: this.props.source
+	};
+
+
+
+
+
+//	
+	componentWillReceiveProps(props) {
+		if (props.source) {
+			this.setState({avatarSource: props.source});
+		}
 	};
 
 
@@ -69,6 +82,10 @@ export default class AvatarPicker extends React.Component {
 //
 			this.setState({
 				avatarSource: {uri: response.uri}
+			}, () => {
+				if (this.props.onSourceChange) {
+					this.props.onSourceChange.call(this);
+				}
 			});
 		});
 	};
