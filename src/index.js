@@ -17,7 +17,7 @@ export default class AvatarPicker extends React.Component {
 		imageHeigh: PropTypes.number,
 		borderColor: PropTypes.string,
 		borderRadius: PropTypes.number,
-		source: PropTypes.number,
+		source: PropTypes.object,
 		onSourceChange: PropTypes.func
 	};
 
@@ -80,8 +80,10 @@ export default class AvatarPicker extends React.Component {
 				return;
 			}
 //
+			let uri = 'data:' + response.type + ';base64,' + response.data;
+//
 			this.setState({
-				avatarSource: {uri: response.uri}
+				avatarSource: {uri}
 			}, () => {
 				if (this.props.onSourceChange) {
 					this.props.onSourceChange.call(this);
@@ -118,10 +120,10 @@ export default class AvatarPicker extends React.Component {
 //
 		return (
 			<TouchableOpacity onPress={this._pressEvent.bind(this)}>
-				<View style={[this.styles.avatar, this.styles.container, {width, height}]}>
+				<View style={[this.styles.avatarView, this.styles.container, {width, height}]}>
 					{this.state.avatarSource === null
 						? <Text style={this.styles.avatarText}>{this.props.label}</Text>
-						: <Image style={[this.styles.avatar, {width, height}]} source={this.state.avatarSource} />
+						: <Image style={[this.styles.avatarImage, {width, height}]} source={this.state.avatarSource} />
 					}
 				</View>
 			</TouchableOpacity>
@@ -140,7 +142,10 @@ export default class AvatarPicker extends React.Component {
 			justifyContent: 'center',
 			alignItems: 'center'
 		},
-		avatar: {
+		avatarView: {
+			borderRadius: this.props.borderRadius
+		},
+		avatarImage: {
 			borderRadius: this.props.borderRadius
 		},
 		avatarText: {
